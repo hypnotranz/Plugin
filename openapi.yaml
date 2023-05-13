@@ -1,93 +1,100 @@
-openapi: 3.0.1
+openapi: "3.0.1"
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
-  version: 'v1'
+  title: "Message Plugin"
+  description: "Plugin for sending messages, executing commands, and retrieving pending messages via ChatGPT."
+  version: "v1"
 servers:
-  - url: http://localhost:5003
+  - url: "http://localhost:5003"
 paths:
-  /todos/{username}:
+  /ai-plugin.json:
     get:
-      operationId: getTodos
-      summary: Get the list of todos
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
+      operationId: "getAIPluginConfig"
+      summary: "Get AI plugin config"
+      description: "Returns the AI plugin configuration."
       responses:
         "200":
-          description: OK
+          description: "OK"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTodosResponse'
+                type: "object"
+                additionalProperties:
+                  type: "string"
+        default:
+          description: "Unexpected error"
+  /openapi.yaml:
+    get:
+      operationId: "getOpenAPISpec"
+      summary: "Get OpenAPI spec"
+      description: "Returns the OpenAPI specification."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/yaml:
+              schema:
+                type: "string"
+        default:
+          description: "Unexpected error"
+  /send-message:
     post:
-      operationId: addTodo
-      summary: Add a todo to the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
+      operationId: "sendMessage"
+      summary: "Send a message"
+      description: "Accepts any message in JSON or XML format."
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/addTodoRequest'
+              type: "object"
+              properties: {}
+              additionalProperties: true
+          application/xml:
+            schema:
+              type: "string"
       responses:
         "200":
-          description: OK
-    delete:
-      operationId: deleteTodo
-      summary: Delete a todo from the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sendMessageResponse"
+        default:
+          description: "Unexpected error"
+  /get-messages:
+    post:
+      operationId: "getMessages"
+      summary: "Get pending messages"
+      description: "Returns pending messages. Filter by including a JSON object in the request body."
+      description: "Returns pending messages. Filter by including a JSON object in the request body."
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
+              type: "object"
+              properties: {}
+              additionalProperties:
+                type: "string"
       responses:
         "200":
-          description: OK
-
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties: {}
+                  additionalProperties:
+                    type: "string"
+        default:
+          description: "Unexpected error"
 components:
   schemas:
-    getTodosResponse:
-      type: object
+    sendMessageResponse:
+      type: "object"
       properties:
-        todos:
-          type: array
-          items:
-            type: string
-          description: The list of todos.
-    addTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
-          type: string
-          description: The todo to add to the list.
-          required: true
-    deleteTodoRequest:
-      type: object
-      required:
-      - todo_idx
-      properties:
-        todo_idx:
-          type: integer
-          description: The index of the todo to delete.
-          required: true
+        status:
+          type: "string"
+          description: "Status of the message send operation."
