@@ -1,6 +1,8 @@
 import logging
 import quart
 import quart_cors
+from quart import send_file
+
 
 from chatgpt_plugin.endpoints.send_message import send_message
 from chatgpt_plugin.endpoints.get_messages import get_messages
@@ -23,7 +25,10 @@ class RestMessageSource(MessageSource):
 
         @self.app.after_request
         async def log_response_info(response):
-            logging.info('Response: %s', (await response.get_data()).decode())
+            if "text" in response.mimetype or "json" in response.mimetype:
+                logging.info('Response: %s', (await response.get_data()).decode())
+            else:
+                logging.info('Response: Binary data not logged')
             return response
 
         @self.app.route("/send-message", methods=['POST'])
@@ -36,7 +41,7 @@ class RestMessageSource(MessageSource):
 
         @self.app.route('/logo.png')
         async def plugin_logo():
-            return await send_file('path/to/logo.png', mimetype='image/png')
+            return await send_file('logo.png', mimetype='image/png')
 
 
         self.app.route("/.well-known/ai-chatgpt_plugin.json", methods=['GET'])(plugin_manifest)

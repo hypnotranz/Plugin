@@ -8,6 +8,9 @@ async def execute_command():
     command = request_data.get("command")
     stdin = request_data.get("stdin")
 
+    if not command:
+        return quart.jsonify({"error": "No command provided"}), 400
+
     logging.info(f"Executing command: {command}")
 
     process = subprocess.Popen(

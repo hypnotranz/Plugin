@@ -56,9 +56,12 @@ class TestMain(unittest.TestCase):
     def test_execute_command(self):
         url = 'http://localhost:5003/execute-command'
         headers = {'Content-Type': 'application/json'}
-        payload = {}  # adjust as needed
+        payload = {
+            "command": "echo Hello, World!"  # Provide a command to execute
+        }
         response = requests.post(url, headers=headers, data=json.dumps(payload))
         self.assertEqual(response.status_code, 200)
+
 
 if __name__ == '__main__':
     unittest.main()
