@@ -1,5 +1,5 @@
 # message_factory.py
-from .message import Message
+from chatgpt_plugin.endpoints.message import Message
 
 class MessageFactory:
     def create_message(self, data):

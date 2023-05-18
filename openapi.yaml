@@ -40,18 +40,38 @@ paths:
     post:
       operationId: "sendMessage"
       summary: "Send a message"
-      description: "Accepts any message in JSON or XML format."
+      description: "Accepts any message in JSON format."
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: "object"
-              properties: {}
-              additionalProperties: true
-          application/xml:
-            schema:
-              type: "string"
+              properties:
+                sender_actor:
+                  type: "string"
+                sender_agent:
+                  type: "string"
+                log_correlation_path:
+                  type: "string"
+                recipient_agent:
+                  type: "string"
+                recipient_actor:
+                  type: "string"
+                message_type:
+                  type: "string"
+                subject:
+                  type: "string"
+                content:
+                  type: "string"
+              required:
+                - sender_actor
+                - sender_agent
+                - log_correlation_path
+                - recipient_agent
+                - recipient_actor
+                - message_type
+                - subject
       responses:
         "200":
           description: "OK"
@@ -65,7 +85,6 @@ paths:
     post:
       operationId: "getMessages"
       summary: "Get pending messages"
-      description: "Returns pending messages. Filter by including a JSON object in the request body."
       description: "Returns pending messages. Filter by including a JSON object in the request body."
       requestBody:
         required: true

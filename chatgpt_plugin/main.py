@@ -1,18 +1,27 @@
 from chatgpt_plugin.dispatcher import Dispatcher
-from chatgpt_plugin.chatgpt_plugin import Plugin
 from chatgpt_plugin.message_handler import MessageHandler
+from chatgpt_plugin.message_store import MessageStore
 from chatgpt_plugin.endpoints.rest_message_source import RestMessageSource
+import asyncio
+import os
 
+# Set the environment variable for asyncio debugging
+os.environ['PYTHONASYNCIODEBUG'] = '0'
 
-# Initialize the dispatcher
-dispatcher = Dispatcher()
+# Get the event loop
+loop = asyncio.get_event_loop()
 
-# Initialize a list of plugins
-plugins = [Plugin(MessageHandler())]
+# Set the debug mode
+loop.set_debug(False)
 
-# Register plugins with the dispatcher
-for plugin in plugins:
-    dispatcher.register_plugin(plugin)
+# Initialize the message store
+message_store = MessageStore()
+
+# Initialize the message handler
+message_handler = MessageHandler(message_store)
+
+# Initialize the dispatcher with the message store and message handler
+dispatcher = Dispatcher(message_store, message_handler)
 
 # Initialize a list of message sources
 sources = [RestMessageSource(dispatcher)]

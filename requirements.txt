@@ -1,2 +1,4 @@
-quart
+quart~=0.18.4
 quart-cors
+requests~=2.30.0
+xmltodict~=0.13.0
