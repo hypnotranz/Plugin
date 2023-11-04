@@ -1,0 +1,62 @@
+{
+  "message_type": "wsl-bash",
+  "content": "mkdir -p ./"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd ./ && git init"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "mkdir -p ./.well-known"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd ./.well-known && git init"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd ./.well-known && git config --global user.email"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "apt-get install -y openapi-generator && openapi-generator generate -i ./openapi.yaml -g python-flask -o ./server"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "apt-get install -y newman && openapi-generator generate -i ./openapi.yaml -g postman -o ./postman_tests"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd . && python -m unittest"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd . && newman run ./postman_tests/agent_plugin.postman_collection.json"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd . && git add ."
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd . && git commit -m \"Initial commit\""
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd . && git remote add origin
+}
+{
+  "message_type": "wsl-bash",
+  "content": "cd ./server && python main.py"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "find . -name '*.py'"
+}
+{
+  "message_type": "wsl-bash",
+  "content": "pip install openapi-generator"
+}
+
+

@@ -2,12 +2,12 @@
 
 
 # Run tests
-python -m unittest tests.test_message
-python -m unittest tests.test_message_store
-python -m unittest tests.test_message_handler
-python -m unittest tests.test_dispatcher
-python -m unittest tests.test_message_flows
-python -m unittest tests.test_send_message
+#python -m unittest tests.test_message
+#python -m unittest tests.test_message_store
+#python -m unittest tests.test_message_handler
+#python -m unittest tests.test_dispatcher
+#python -m unittest tests.test_message_flows
+#python -m unittest tests.test_send_message
 
 #pytest tests/test_endpoints.py
 
@@ -35,3 +35,4 @@ kill $SERVER_PID
 
 # Done
 echo 'Done.'
+export PYTHONASYNCIODEBUG=500

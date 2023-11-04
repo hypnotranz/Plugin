@@ -7,7 +7,7 @@ class Plugin:
 
     def filter(self, message: Message):
         # Only process 'wsl-bash' messages
-        return message.message_type == 'wsl-bash'
+        return message.message_type == 'wsl-bash' or message.message_type == 'dev_team'
 
     def handle_message(self, message: Message):
         if self.filter(message):

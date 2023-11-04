@@ -20,11 +20,14 @@ class Dispatcher:
         self._message_handler.process_message(message)
         for plugin in self._plugins:
             if plugin.filter(message):
-                response = plugin.handle_message(message)
-                self._message_store.add_message(Message(response))
+                plugin.handle_message(message)
+#                self._message_store.add_message(Message(response))
 
     def get_responses(self, message_id):
         return self._message_store.get_responses
 
     def get_plugins(self):
         return self._plugins
+
+    def get_message_handler(self):
+        return self._message_handler

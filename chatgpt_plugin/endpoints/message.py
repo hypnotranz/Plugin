@@ -13,7 +13,7 @@ class Message:
     def __init__(self, data):
         self.data = data
         self.message_id = 1
-        logging.info(f"Message created with ID: {self.message_id} and data: {self.data}")
+        #logging.info(f"Message created with ID: {self.message_id} and data: {self.data}")
 
         self.parent_id = data.get('parent_id')
         self.sender_actor = data.get('sender_actor')
@@ -29,13 +29,13 @@ class Message:
         return {
             "data": self.data,
             "message_id": self.message_id,
-            "parent_id": self.parent_id,
-            "sender_actor": self.sender_actor,
-            "sender_agent": self.sender_agent,
-            "log_correlation_path": self.log_correlation_path,
-            "recipient_agent": self.recipient_agent,
-            "recipient_actor": self.recipient_actor,
+   #         "parent_id": self.parent_id,
+   #         "sender_actor": self.sender_actor,
+   #         "sender_agent": self.sender_agent,
+   #         "log_correlation_path": self.log_correlation_path,
+   #         "recipient_agent": self.recipient_agent,
+   #         "recipient_actor": self.recipient_actor,
             "message_type": self.message_type,
-            "subject": self.subject,
+   #         "subject": self.subject,
             "content": self.content,
         }

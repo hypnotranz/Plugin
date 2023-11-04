@@ -52,7 +52,14 @@ class RestMessageSource(MessageSource):
         async def plugin_logo():
             return await send_file('logo.png', mimetype='image/png')
 
-        self.app.route("/.well-known/ai-plugin.json", methods=['GET'])(plugin_manifest)
+        @self.app.route("/.well-known/ai-plugin.json", methods=['GET'])
+        async def plugin_manifest_route():
+            return await plugin_manifest(self.dispatcher)
+
+        @self.app.route("/ai-plugin.json", methods=['GET'])
+        async def plugin_manifest_route_alias():
+            return await plugin_manifest(self.dispatcher)
+
         self.app.route("/openapi.yaml", methods=['GET'])(openapi_spec)
 
     def run(self):

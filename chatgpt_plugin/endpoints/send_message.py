@@ -5,6 +5,7 @@ from xml.etree import ElementTree as ET
 import logging
 import json
 import xmltodict
+import uuid
 from chatgpt_plugin.message_factory import MessageFactory
 
 message_factory = MessageFactory()
@@ -51,7 +52,12 @@ async def send_message(dispatcher, message: Message):
 
     logging.info(f"Received message: {message_data}")
 
-    # Create a Message object from the parsed data
+    # Generate a unique ID for the message
+    message_id = str(uuid.uuid4())
+
+    message_data['message_id'] = message_id
+
+    # Create a Message object from the parsed data, passing the unique ID
     message = Message(message_data)
 
     # Here is where you'd pass the message to your message handler
@@ -63,4 +69,14 @@ async def send_message(dispatcher, message: Message):
 
     processed_messages = dispatcher.get_responses(0)
     processed_messages = [message.to_dict() for message in processed_messages]
-    return jsonify(processed_messages)
+
+    # Log the processed messages
+    logging.info(f"Processed messages: {processed_messages}")
+
+    responses = jsonify(processed_messages)
+
+    # Log the JSONified response
+    logging.info(f"JSONified response: {responses}")
+
+    return responses
+
