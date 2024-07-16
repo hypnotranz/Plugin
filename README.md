@@ -8,7 +8,7 @@ Run ngrok to open direct the port for the service
 
 
 ```powershell
-ngrok http --domain=katydid-glorious-slightly.ngrok-free.app 5003        
+ngrok http --domain=yourngrok.domain 5003        
 ```
 
 To install the required packages for this plugin, run the following command:
