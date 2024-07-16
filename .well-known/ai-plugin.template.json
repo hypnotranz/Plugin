@@ -9,7 +9,7 @@
     },
     "api": {
       "type": "openapi",
-      "url": "http://localhost:5003/openapi.yaml",
+      "url": "https://katydid-glorious-slightly.ngrok-free.app/",
       "is_user_authenticated": false
     },
     "plugin_info_url": "http://localhost:5003/.well-known/ai-plugin.json",

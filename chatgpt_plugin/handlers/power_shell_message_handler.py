@@ -64,5 +64,5 @@ class PowerShellMessageHandler(BaseMessageHandler):
     def get_examples(cls):
         return [
        #     {"message_type": "powershell", "content": "Get-Content -Path 'pathtofilefile.txt'"},
-      #      {"message_type": "powershell", "content": "(Get-Content 'pathtofilefile.txt') -replace 'oldString', 'newSpowetring' | Set-Content 'C:pathtofilefile.txt'"}
+      #      {"message_type": "powershell", "content": "(Get-Content 'pathtofilefile.txt') -replace 'oldString', 'newString' | Set-Content 'C:pathtofilefile.txt'"}
         ]

@@ -25,7 +25,7 @@ warnings.filterwarnings('ignore', category=RuntimeWarning, module='asyncio')
 class RestMessageSource(MessageSource):
     def __init__(self, dispatcher):
         self.dispatcher = dispatcher  # store the dispatcher instance
-        self.app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
+        self.app = quart_cors.cors(quart.Quart(__name__), allow_origin="*")
         logging.basicConfig(level=logging.INFO)
 
 
@@ -37,6 +37,15 @@ class RestMessageSource(MessageSource):
             logging.info(f"Received request_data: {request_data}")
             message = Message(request_data)
             return await send_message(self.dispatcher, message)
+
+        @self.app.route("/get-manifest", methods=['POST'])
+        async def get_manifest_route():
+            logging.info(f"Received request");
+            request_data = await quart.request.get_json(force=True)
+            logging.info(f"Received request_data: {request_data}")
+            message = Message(request_data)
+            return await send_message(self.dispatcher, message)
+
 
         @self.app.route("/get-messages", methods=['POST'])
         async def get_messages_route():

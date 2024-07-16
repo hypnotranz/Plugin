@@ -3,15 +3,16 @@ from chatgpt_plugin.endpoints.message import Message
 from chatgpt_plugin.message_store import MessageStore
 import logging
 from handlers.base_message_handler import BaseMessageHandler  # Import BaseMessageHandler
-class PowerShellMessageHandler(BaseMessageHandler):
+
+class WslBashMessageHandler(BaseMessageHandler):
     @staticmethod
     def get_message_type():
-        return 'powershell'
+        return 'wsl-bash'
 
     @staticmethod
     def handle_message(message, message_store: MessageStore):
         logger = logging.getLogger(__name__)
-        logger.info(f"Handling PowerShell command: {message}")
+        logger.info(f"Handling status update: {message}")
 
         command = message.data.get("content")
 
@@ -19,14 +20,11 @@ class PowerShellMessageHandler(BaseMessageHandler):
             logger.error("Invalid command")
             return
 
-        logger.info(f"Executing PowerShell command: {command}")
-
-        # Prefix the command with 'powershell' to ensure it's executed in PowerShell
-        full_command = f"powershell {command}"
+        logger.info(f"Executing command: {command}")
 
         try:
             process = subprocess.Popen(
-                full_command,
+                command,
                 shell=True,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
@@ -52,7 +50,7 @@ class PowerShellMessageHandler(BaseMessageHandler):
             logger.info(f"Adding response message to store: {response_message.to_dict()}")
             message_store.add_message(response_message)
         except Exception as e:
-            logger.error(f"Failed to execute PowerShell command: {e}")
+            logger.error(f"Failed to execute command: {e}")
             response_message = Message({
                 "subject": "Response to " + (message.subject if message.subject is not None else "unknown subject"),
                 "error": str(e),
@@ -60,9 +58,10 @@ class PowerShellMessageHandler(BaseMessageHandler):
             logger.info(f"Adding error response message to store: {response_message.to_dict()}")
             message_store.add_message(response_message)
 
+
     @classmethod
     def get_examples(cls):
         return [
-       #     {"message_type": "powershell", "content": "Get-Content -Path 'pathtofilefile.txt'"},
-      #      {"message_type": "powershell", "content": "(Get-Content 'pathtofilefile.txt') -replace 'oldString', 'newSpowetring' | Set-Content 'C:pathtofilefile.txt'"}
+            {"message_type": "wsl-bash", "content": "ls -la"},
+            {"message_type": "wsl-bash", "content": "mkdir new_directory"}
         ]

@@ -116,7 +116,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_openapi_spec(self):
-        url = 'http://localhost:5003/openapi.yaml'
+        url = 'https://localhost:5003/openapi.yaml'
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 

@@ -28,8 +28,8 @@ class MessageHandler:  # This class is responsible for handling messages
         self.message_store = message_store
 
     def load_handlers(self):
-        # Assuming all handler modules are in a directory named 'handlers'
-        package_name = 'handlers'
+        # Now assuming all handler modules are in a subdirectory named 'handlers' within 'chatgpt_plugin'
+        package_name = 'chatgpt_plugin.handlers'
         package = __import__(package_name, fromlist=[""])
 
         for _, module_name, _ in pkgutil.iter_modules(package.__path__):
@@ -37,7 +37,7 @@ class MessageHandler:  # This class is responsible for handling messages
             handler_class_name = ''.join(word.capitalize() for word in module_name.split('_'))
             handler_class = getattr(module, handler_class_name)
             message_type = handler_class.get_message_type()
-            self.handlers[message_type] = handler_class  # store the class, not the handle_message method
+            self.handlers[message_type] = handler_class
 
     def process_message(self, message: Message):
         self.logger.info(f"Loading handlers: {message.data}")
