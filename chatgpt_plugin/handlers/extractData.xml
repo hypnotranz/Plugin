@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dsc>
+	<name>extract_data</name>
+	<type>POSTGRESQL</type>
+	<connectionString>jdbc:postgresql://pgsql.us-east-1-qa.aws.umtechx:5432/umtechx_qa</connectionString>
+	<providerName>org.postgresql.Driver</providerName>
+	<schema>de</schema>
+	<userid>pgsql</userid>
+	<password><![CDATA[yhaDszYrbp_aa3mks#k]]></password>
+</dsc>

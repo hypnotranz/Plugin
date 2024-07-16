@@ -2,6 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/repos/Plugin" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/repos/SDR" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/repos/extractor" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/repos/gather-changes" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/repos/guidance" vcs="Git" />
   </component>
 </project>

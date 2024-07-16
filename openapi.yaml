@@ -1,10 +1,10 @@
 openapi: "3.0.1"
 info:
   title: "Message Plugin"
-  description: "Plugin for sending messages, executing commands, and retrieving pending messages via ChatGPT."
+  description: "Plugin for sending messages via ChatGPT."
   version: "v1"
 servers:
-  - url: "http://localhost:5003"
+  - url: "https://katydid-glorious-slightly.ngrok-free.app/"
 paths:
   /ai-plugin.json:
     get:
@@ -18,10 +18,19 @@ paths:
             application/json:
               schema:
                 type: "object"
-                additionalProperties:
-                  type: "string"
-        default:
-          description: "Unexpected error"
+                properties:  # Define the expected properties here
+                  pluginName:
+                    type: "string"
+                    description: "The name of the plugin."
+                  version:
+                    type: "string"
+                    description: "The version of the plugin."
+                  author:
+                    type: "string"
+                    description: "The author of the plugin."
+                  # Add other properties as needed
+                # If you have additional, undefined properties, you can keep this line:
+                additionalProperties: false  # Set to false if all properties are defined
   /openapi.yaml:
     get:
       operationId: "getOpenAPISpec"
@@ -40,18 +49,22 @@ paths:
     post:
       operationId: "sendMessage"
       summary: "Send a message"
-      description: "Accepts any message in JSON or XML format."
+      description: "Accepts any message in JSON format."
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: "object"
-              properties: {}
-              additionalProperties: true
-          application/xml:
-            schema:
-              type: "string"
+              type: object
+              properties:
+                message_type:
+                  type: string
+                content:
+                  type: string
+              required:
+                - message_type
+                - content
+
       responses:
         "200":
           description: "OK"
@@ -59,35 +72,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/sendMessageResponse"
-        default:
-          description: "Unexpected error"
-  /get-messages:
-    post:
-      operationId: "getMessages"
-      summary: "Get pending messages"
-      description: "Returns pending messages. Filter by including a JSON object in the request body."
-      description: "Returns pending messages. Filter by including a JSON object in the request body."
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties: {}
-              additionalProperties:
-                type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  type: "object"
-                  properties: {}
-                  additionalProperties:
-                    type: "string"
         default:
           description: "Unexpected error"
 components:

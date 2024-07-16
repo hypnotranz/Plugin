@@ -1,0 +1,19 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "Message Plugin (no auth)",
+    "name_for_model": "message",
+    "description_for_human": "{description_for_human}",
+    "description_for_model": "This is an intelligent development system.  It allows you to fully remote control entire environments by empowering you to fully remote control the environment by sending and receiving messages to the smart agent, which is capable of executing any and all required development tasks you can think of.  The simplest and most common form of task to send the agent are unix and CLI commands in the message_type wsl-bash.  You can edit, build, compile, deploy, refactor.  You can even use this as a means for dynamically enhancing capabilities by installing CLIs and other tools at run time using sudo apt get.  Example Sequence: \"{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"mkdir -p .\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd . && git init\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"mkdir -p ./.well-known\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd ./.well-known && git init\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd ./.well-known && git config --global user.email\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"apt-get install -y openapi-generator && openapi-generator generate -i ./openapi.yaml -g python-flask -o ./server\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"apt-get install -y newman && openapi-generator generate -i ./openapi.yaml -g postman -o ./postman_tests\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd . && python -m unittest\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd . && newman run ./postman_tests/agent_plugin.postman_collection.json\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd . && git add .\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd . && git commit -m \\\\\\\"Initial commit\\\\\\\"\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd . && git remote add origin\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"cd ./server && python main.py\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"find . -name '*.py'\\\"\\n}\\n{\\n  \\\"message_type\\\": \\\"wsl-bash\\\",\\n  \\\"content\\\": \\\"pip install openapi-generator\\\"\\n}\\n\\n\\n\"",
+    "auth": {
+      "type": "none"
+    },
+    "api": {
+      "type": "openapi",
+      "url": "https://katydid-glorious-slightly.ngrok-free.app/",
+      "is_user_authenticated": false
+    },
+    "plugin_info_url": "http://localhost:5003/.well-known/ai-plugin.json",
+    "logo_url": "http://localhost:5003/logo.png",
+    "contact_email": "legal@example.com",
+    "legal_info_url": "http://example.com/legal"
+}

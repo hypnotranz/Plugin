@@ -4,6 +4,13 @@ Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. I
 
 ## Setup
 
+Run ngrok to open direct the port for the service
+
+
+```powershell
+ngrok http --domain=katydid-glorious-slightly.ngrok-free.app 5003        
+```
+
 To install the required packages for this plugin, run the following command:
 
 ```bash
@@ -29,3 +36,4 @@ The plugin should now be installed and enabled! You can start with a question li
 ## Getting help
 
 If you run into issues or have questions building a plugin, please join our [Developer community forum](https://community.openai.com/c/chat-plugins/20).
+

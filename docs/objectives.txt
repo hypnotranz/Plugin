@@ -1,0 +1,29 @@
+
+Initial manifest code example usages should include an example series of discovery messages.
+
+ok.  how can we facilitate the discovery of this?  it seems there should be a discovery "path" such that one can traverse the set of plugins hierarchically to discover affordances.  this can go in the core plugin which currently contains wsl-bash, but we need a way for the user to be able to programatically discover these features.  perhaps each plugin (including core) needs to have its own discovery mechanism.  we can do the same for other resources going forward, like logs, databases, agents, actor prompts, etc.
+
+but for now, what would the discovery for this look like, and how can we modify the examples in the manifest to facilitate the intuitive discovery of these types of resources.  specifically core for now
+
+you will need the ability to process logs.  i believe an enterprise logging tool like kabana would be ideal.  we can search on correlation ids and agents and whatever fields we decide we need in the messages.  as well, I think it would be a good idea to use a path system to track progress on larger goals by using a heirarchical structure for threading.  perhaps something like "uuid/{high-level-task-id}/{subgoa_idl}/..."  where the tree can extend as needed.  is there a way we can begin with flat files, but structure them in a way such that we can later ingest them?  I am not sure about the costs or what it would take to set up elk or another enterprise logging product.  but if you know how, we can bootstrap that way. maybe open source.  for now though, I think file system logging will have to suffice.
+Ok.  we want to log all messages you (the actor) send to the agent (plugin), as well as the smaller tasks that it does to accomplish things (like system commands, and git actions, and jira/confluence, database updates.).  I presume these will always be leaves that are situated within higher goals.  we also want to include on the higher level items some kind of gherken type explanation of what we are doing and why.  but that can be a longer term goal if it needs to be.  for now it is critical that we log all incoming and outgoing messages completely, as well as the steps taken and any errors and error messages disovered along the way.
+
+
+bear in mind the message structure will need to afford the logging requirements, so lets track any updates we will need to the message format in a file on the filesystem so we can refer back to it later, when we need to create the manifest.  if you need to see what i mean by manifest, its in ./well-known/ai-plugin.json .  this is here to help you understand how to use the plugin.  i have structured it to use communication examples in xml because that seemed like the simplest way to represent messages embedded in json without creating confusion.  there may be better options.  the point is we need to keep a separate file, maybe a copy of it or notes, to maintain changes we may later want to make to that.  but we need to review them very carefully because the key field "description_for_model" only allows us 8000 characters to inform you of the vast range of affordances the plugin system will give you.   on that note, i believe we can use a heirarchical structure for this system of plugins as well, and make it discoverable, in such a way that you should be able to discover new abilities and how to use them by normalizing the messages into a canonical format.  the format i have defined was my first attempt.  it can change.  and need to include a way for you to navigate your and discover the plugins affordances quickly while spending as few tokens as possible.  if you get the drift, we can begin with adding the logging to the critical path you have so far, which is unix commands.  next we can begin optomizing message formats and plugins for affordances
+
+
+ok.  thats a lot to bootstrap, but it is top priority now that this is finally working somwhat.  how can we bootstrap and get the most bang for the buck
+
+
+To bootstrap this process and get the most value quickly, you can prioritize the steps as follows:
+
+Working Directory and Version Control: Start by setting up a separate working directory and initializing a Git repository. This will immediately provide a safety net for changes and allow for version tracking.
+
+Incremental Changes and Documentation: Adopt the practice of making small, incremental changes and documenting them. This doesn't require any additional tooling, but it's a powerful habit that can prevent many issues.
+
+
+our documentation sucks.  we need an in depth design document for the god damn fucking python based file manager.  its going in core mesagehandler next to wsl-bash.  please make architecture. filemanager.md and put exact design specification for this change.  it must include use cases for remove lines, modify, add, insert and shit like that.  must include expected messaaige format,  and how message sequences will lead to cleanly updated file with no errors.  as well, sample message sequence for core manifest ./well-known/ai-plugin.  and finally, must include code snippet for unit test, followed by snippet for implementation.  this all of these can be completed in parts.  srchitecture.file_manager (requirements, nfrs, and constraints), design.file_manager.use_cases,  design.filemanager.message_formats, design.filemanager.messages_sequences, design.filemanager.implementation, design.file_manager.manifest_discovery.   dont fuck this up.  it has to be highly technical and utilise the language of software architecture and design patterns and give detailed plan for implementation and integration.
+
+always make sure to read files before updating
+
+the swagger/openapi for the plugin is a great way to implicitly demonstrate features.  maybe this is where discovery should go.  lets make canonical format for discovery messages

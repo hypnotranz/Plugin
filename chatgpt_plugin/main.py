@@ -1,18 +1,34 @@
 from chatgpt_plugin.dispatcher import Dispatcher
-from chatgpt_plugin.chatgpt_plugin import Plugin
 from chatgpt_plugin.message_handler import MessageHandler
+from chatgpt_plugin.message_store import MessageStore
 from chatgpt_plugin.endpoints.rest_message_source import RestMessageSource
+from chatgpt_plugin.plugin import Plugin
+import asyncio
+import os
 
+# Set the environment variable for asyncio debugging
+os.environ['PYTHONASYNCIODEBUG'] = '0'
 
-# Initialize the dispatcher
-dispatcher = Dispatcher()
+# Get the event loop
+loop = asyncio.get_event_loop()
 
-# Initialize a list of plugins
-plugins = [Plugin(MessageHandler())]
+# Set the debug mode
+loop.set_debug(False)
 
-# Register plugins with the dispatcher
-for plugin in plugins:
-    dispatcher.register_plugin(plugin)
+# Initialize the message store
+message_store = MessageStore()
+
+# Initialize the message handler
+message_handler = MessageHandler(message_store)
+
+# Initialize the new plugin
+wsl_bash_plugin = Plugin(message_store)
+
+# Initialize the dispatcher with the message store, message handler, and the new plugin
+dispatcher = Dispatcher(message_store, message_handler)
+
+# Register the new plugin with the dispatcher
+dispatcher.register_plugin(wsl_bash_plugin)
 
 # Initialize a list of message sources
 sources = [RestMessageSource(dispatcher)]
@@ -20,10 +36,3 @@ sources = [RestMessageSource(dispatcher)]
 # Start message sources
 for source in sources:
     source.run()
-
-# Here you would typically have a loop that dispatches messages from the sources
-# Something like this:
-# while True:
-#     for source in sources:
-#         message = source.receive_message()
-#         dispatcher.dispatch_message(message)
