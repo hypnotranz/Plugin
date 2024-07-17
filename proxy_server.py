@@ -37,27 +37,29 @@ async def handle_websocket(websocket):
 
             # Extract the request ID from the response
             response_data = json.loads(response)
+            logging.debug(f"Proxy server: Response data before extracting request_id: {response_data}")
+
             if isinstance(response_data, list):
                 for item in response_data:
-                    request_id = item.get('request_id')
+                    request_id = item.pop('request_id', None)
                     logging.debug(f"Proxy server: Extracted request_id {request_id} from response list item")
                     if request_id and request_id in response_futures:
-                        # Remove the request_id from the response
-                        del item['request_id']
-                        response_futures[request_id].set_result(json.dumps(response_data))
+                        response_futures[request_id].set_result(json.dumps(item))
                         del response_futures[request_id]
             else:
-                request_id = response_data.get('request_id')
+                request_id = response_data.pop('request_id', None)
                 logging.debug(f"Proxy server: Extracted request_id {request_id} from response data")
                 if request_id and request_id in response_futures:
-                    # Remove the request_id from the response
-                    del response_data['request_id']
-                    response_futures[request_id].set_result(json.dumps([response_data]))
+                    response_futures[request_id].set_result(json.dumps(response_data))
                     del response_futures[request_id]
     except websockets.exceptions.ConnectionClosed as e:
         logging.info(f"Proxy server: WebSocket connection closed with error: {e}")
+    except Exception as e:
+        logging.error(f"Proxy server: Error handling WebSocket connection: {e}")
+        logging.error(traceback.format_exc())
     finally:
         websocket_clients.remove(websocket)
+        logging.info(f"Proxy server: WebSocket connection removed")
 
 # Function to handle REST calls
 async def handle_rest(request):
@@ -69,11 +71,13 @@ async def handle_rest(request):
             request_id = str(id(request))
             logging.debug(f"Proxy server: Generated request_id: {request_id}")
             request_info = {
-                "method": request.method,
-                "path": request.path,
-                "headers": dict(request.headers),
-                "data": data,
-                "request_id": request_id
+                "envelope": {
+                    "request_id": request_id,
+                    "method": request.method,
+                    "path": request.path,
+                    "headers": dict(request.headers),
+                },
+                "data": data
             }
             response_future = asyncio.Future()
             response_futures[request_id] = response_future

@@ -48,11 +48,12 @@ async def listen(port_ws):
                 logging.info(f"WebSocket client: Received message from proxy: {message}")
 
                 # Assuming message is a JSON string with the necessary information
-                request_info = json.loads(message)
+                envelope = json.loads(message)
+                request_info = envelope.get("envelope")
+                data = envelope.get("data")
                 method = request_info.get("method", "POST")
                 path = request_info.get("path", "/send-message")
                 headers = request_info.get("headers", {})
-                data = request_info.get("data", "")
                 request_id = request_info.get("request_id")
                 logging.debug(f"WebSocket client: Handling request with request_id: {request_id}")
 
