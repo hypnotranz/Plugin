@@ -44,13 +44,13 @@ async def handle_websocket(websocket):
                     request_id = item.pop('request_id', None)
                     logging.debug(f"Proxy server: Extracted request_id {request_id} from response list item")
                     if request_id and request_id in response_futures:
-                        response_futures[request_id].set_result(json.dumps(item))
+                        response_futures[request_id].set_result(json.dumps(response_data))  # Return the entire list
                         del response_futures[request_id]
             else:
                 request_id = response_data.pop('request_id', None)
                 logging.debug(f"Proxy server: Extracted request_id {request_id} from response data")
                 if request_id and request_id in response_futures:
-                    response_futures[request_id].set_result(json.dumps(response_data))
+                    response_futures[request_id].set_result(json.dumps([response_data]))  # Wrap single item in a list
                     del response_futures[request_id]
     except websockets.exceptions.ConnectionClosed as e:
         logging.info(f"Proxy server: WebSocket connection closed with error: {e}")
@@ -60,6 +60,9 @@ async def handle_websocket(websocket):
     finally:
         websocket_clients.remove(websocket)
         logging.info(f"Proxy server: WebSocket connection removed")
+
+# Middleware to normalize paths
+
 
 # Function to handle REST calls
 async def handle_rest(request):
@@ -96,9 +99,10 @@ async def handle_rest(request):
         logging.error(traceback.format_exc())
         return web.Response(status=500, text="Internal Server Error")
 
-# Create aiohttp web application
+# Create aiohttp web application with path normalization middleware
 app = web.Application()
 app.router.add_post('/send-message', handle_rest)
+app.router.add_post('//send-message', handle_rest)
 
 # Function to start REST server
 async def start_rest_server(port):
