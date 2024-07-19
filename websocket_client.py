@@ -22,11 +22,12 @@ async def forward_to_rest(method, url, headers, data):
         logging.error(traceback.format_exc())
         return "Error forwarding message to REST server"
 
-async def connectivity_check():
+async def connectivity_check(websocket, connection_id):
     ping_message = {
         "sender_actor": "root",
         "message_type": "wsl-bash",
-        "content": "pwd"
+        "content": "pwd",
+        "connection_id": connection_id
     }
     headers = {"Content-Type": "application/json"}
     url = "http://localhost:5003/send-message"
@@ -34,13 +35,18 @@ async def connectivity_check():
     response = await forward_to_rest("POST", url, headers, json.dumps(ping_message))
     logging.info(f"WebSocket client: Initial connectivity check response: {response}")
 
-async def listen(port_ws):
-    uri = f"ws://localhost:{port_ws}"
-    async with websockets.connect(uri) as websocket:
-        logging.info(f"WebSocket client: Connected to proxy server at {uri}")
+async def listen(ws_url):
+    async with websockets.connect(ws_url) as websocket:
+        logging.info(f"WebSocket client: Connected to proxy server at {ws_url}")
+
+        # Receive the connection ID from the proxy server
+        initial_message = await websocket.recv()
+        initial_data = json.loads(initial_message)
+        connection_id = initial_data['connection_id']
+        logging.info(f"WebSocket client: Received connection_id: {connection_id}")
 
         # Perform initial connectivity check
-        await connectivity_check()
+        await connectivity_check(websocket, connection_id)
 
         try:
             while True:
@@ -79,7 +85,7 @@ async def listen(port_ws):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python websocket_client.py <ws_port>")
+        print("Usage: python websocket_client.py <ws_url>")
         sys.exit(1)
-    port_ws = int(sys.argv[1])
-    asyncio.get_event_loop().run_until_complete(listen(port_ws))
+    ws_url = sys.argv[1]
+    asyncio.get_event_loop().run_until_complete(listen(ws_url))
