@@ -10,6 +10,15 @@ import uuid
 
 logging.basicConfig(level=logging.DEBUG)
 
+class PingPongFilter(logging.Filter):
+    def filter(self, record):
+        if "keepalive ping" in record.getMessage() or "keepalive pong" in record.getMessage():
+            return False
+        return True
+
+logger = logging.getLogger('websockets.server')
+logger.addFilter(PingPongFilter())
+
 # Store connected WebSocket clients with their GUIDs
 websocket_clients = {}
 
@@ -90,31 +99,31 @@ async def handle_rest(request):
         message_data = json.loads(data)
         connection_id = message_data.get('connection_id')
 
-        if connection_id and websocket_clients:
-            request_id = str(id(request))
-            logging.debug(f"Proxy server: Generated request_id: {request_id}")
-            request_info = {
-                "envelope": {
-                    "request_id": request_id,
-                    "method": request.method,
-                    "path": request.path,
-                    "headers": dict(request.headers),
-                    "connection_id": connection_id
-                },
-                "data": data
-            }
-            response_future = asyncio.Future()
-            response_futures[request_id] = response_future
-            await request_queue.put(json.dumps(request_info))
-            logging.debug(f"Proxy server: Added REST message to queue: {request_info}")
+        if not connection_id or connection_id not in websocket_clients:
+            logging.error("Proxy server: Invalid or missing connection_id")
+            return web.Response(status=400, text="Invalid or missing connection_id")
 
-            # Wait for the WebSocket client to handle the request and get the response
-            response = await response_future
-            logging.debug(f"Proxy server: Sending response back to initial caller: {response}")
-            return web.Response(text=response)
-        else:
-            logging.error("Proxy server: No WebSocket clients connected to handle the request or connection_id missing")
-            return web.Response(status=500, text="No WebSocket clients connected or connection_id missing")
+        request_id = str(id(request))
+        logging.debug(f"Proxy server: Generated request_id: {request_id}")
+        request_info = {
+            "envelope": {
+                "request_id": request_id,
+                "method": request.method,
+                "path": request.path,
+                "headers": dict(request.headers),
+                "connection_id": connection_id
+            },
+            "data": data
+        }
+        response_future = asyncio.Future()
+        response_futures[request_id] = response_future
+        await request_queue.put(json.dumps(request_info))
+        logging.debug(f"Proxy server: Added REST message to queue: {request_info}")
+
+        # Wait for the WebSocket client to handle the request and get the response
+        response = await response_future
+        logging.debug(f"Proxy server: Sending response back to initial caller: {response}")
+        return web.Response(text=response)
     except Exception as e:
         logging.error(f"Proxy server: Error handling REST call: {e}")
         logging.error(traceback.format_exc())
